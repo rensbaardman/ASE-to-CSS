@@ -13,8 +13,7 @@ generates `swatches.css` with all swatch colors defined as CSS variables on the 
 
 When converting the standard swatches in Illustrator, this is the output:
 
-```
-, filepath=swatch_filepath
+```css
 /* converted from swatches.ase */
 :root {
 	--White: RGB(255, 255, 255);
