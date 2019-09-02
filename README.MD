@@ -2,6 +2,14 @@
 
 Convert Adobe Swatch Exchange files to CSS or SCSS variables!
 
+### Installation
+
+Parsing the `.ase`-file is done by [swatch](https://github.com/nsfmc/swatch). To install:
+
+```
+$ pip install swatch
+```
+
 ### Usage
 
 CSS:
