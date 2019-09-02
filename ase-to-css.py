@@ -2,8 +2,8 @@ import swatch as swatch_parser
 import sys
 import re
 
-def parse_swatches(filename):
-	return swatch_parser.parse(filename)
+def parse_swatches(filepath):
+	return swatch_parser.parse(filepath)
 
 def swatches_to_css(swatches, declarations_only=False):
 
@@ -50,20 +50,20 @@ def swatches_to_css(swatches, declarations_only=False):
 			css = css[:-1]
 		return prefix + css + postfix
 
-def save_css(swatch_filename, css):
-	if swatch_filename.split('.')[-1] == 'ase':
-		css_filename = '.'.join(swatch_filename.split('.')[:-1]) + '.css'
+def save_css(swatch_filepath, css):
+	if swatch_filepath.split('.')[-1] == 'ase':
+		css_filepath = '.'.join(swatch_filepath.split('.')[:-1]) + '.css'
 	else:
-		css_filename = swatch_filename + '.css'
+		css_filepath = swatch_filepath + '.css'
 
-	with open(css_filename, 'w') as file:
+	with open(css_filepath, 'w') as file:
 		file.write(css)
 
 def main():
-	swatch_filename = sys.argv[1]
-	swatches = parse_swatches(swatch_filename)
+	swatch_filepath = sys.argv[1]
+	swatches = parse_swatches(swatch_filepath)
 
-	css = swatches_to_css(swatches)
-	save_css(swatch_filename, css)
+	css = swatches_to_css(swatches, filepath=swatch_filepath)
+	save_css(swatch_filepath, css)
 
 main()
