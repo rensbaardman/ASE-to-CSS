@@ -1,11 +1,15 @@
-# Usage
+# ASE-to-CSS
+
+
+### Usage
 
 ```
-python ase-to-css.py swatches.ase
+$ python ase-to-css.py swatches.ase
 ```
-generates `swatches.css` with all colors defined as CSS variables on the `:root` variables.
+generates `swatches.css` with all swatch colors defined as CSS variables on the `:root` variables.
 
-# Example
+
+### Example
 
 When converting the standard swatches in Illustrator, this is the output:
 
@@ -31,12 +35,13 @@ When converting the standard swatches in Illustrator, this is the output:
 ```
 
 
-# TODO
+### todo
 
 - also output LESS/SCSS
-- consider (giving an option to) prefix group names to variable names
+- consider (giving an option) to prefix group names to variable names
 - check for clashing variable names (note: variable names are case sensitive)
 - add tests
 - check for different swatch options (what if the colors haven't been specified as RGB, or as spot colors, etc.)
 - option to change indentation (currently: 1 tab)
 - bundle as module (+ seperate CLI?)
+- add options export as RGBA (or as hexadecimal) instead of RGB
