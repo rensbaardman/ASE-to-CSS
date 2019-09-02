@@ -5,9 +5,11 @@ import re
 def parse_swatches(filepath):
 	return swatch_parser.parse(filepath)
 
-def swatches_to_css(swatches, declarations_only=False):
+def swatches_to_css(swatches, filepath='', declarations_only=False):
 
-	prefix = ':root {\n'
+	# this might not be Windows-compatible
+	filename = filepath.split('/')[-1]
+	prefix = '/* converted from {0} */\n:root {{\n'.format(filename)
 	css = ''
 	postfix = '}\n'
 
