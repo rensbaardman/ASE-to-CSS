@@ -5,13 +5,28 @@ import re
 def parse_swatches(filepath):
 	return swatch_parser.parse(filepath)
 
-def swatches_to_css(swatches, filepath='', declarations_only=False):
+def swatches_to_css(swatches, style, filepath='', declarations_only=False):
 
 	# this might not be Windows-compatible
 	filename = filepath.split('/')[-1]
-	prefix = '/* converted from {0} */\n:root {{\n'.format(filename)
 	css = ''
-	postfix = '}\n'
+
+	# root variable for using css vars
+	if(style == 'scss'):
+		prefix = '/* converted from {0} */\n'.format(filename)
+	else:
+		prefix = '/* converted from {0} */\n:root {{\n'.format(filename)
+
+	if(style == 'scss'):
+		postfix = '\n'
+	else:
+		postfix = '}\n'
+
+		#set prefix to -- for css and $ for sass
+	if(style == 'scss'):
+		varprefx = '$'
+	else:
+		varprefx = '--'
 
 	# check for valid CSS identifiers (custom property names - a.k.a. variables - are identifiers)
 	# In CSS, identifiers (including element names, classes, and IDs in selectors) can contain only the characters [a-zA-Z0-9] and ISO 10646 characters U+0080 and higher, plus the hyphen (-) and the underscore (_)
@@ -30,7 +45,7 @@ def swatches_to_css(swatches, filepath='', declarations_only=False):
 
 			group_prefix = '{0}\t/* {1} */\n'.format(newline, swatch['name'])
 			group_postfix = '\n'
-			group_declarations = swatches_to_css(swatch['swatches'], declarations_only=True)
+			group_declarations = swatches_to_css(swatch['swatches'], style, declarations_only=True)
 			css += group_prefix + group_declarations + group_postfix
 
 		else:
@@ -42,7 +57,7 @@ def swatches_to_css(swatches, filepath='', declarations_only=False):
 			name = swatch['name']
 			css_name = re.sub(pattern, '_', name)
 
-			css += '\t--{0}: {1};\n'.format(css_name, css_color)
+			css += '\t{0}{1}: {2};\n'.format(varprefx, css_name, css_color)
 
 	if declarations_only:
 		return css
@@ -52,11 +67,17 @@ def swatches_to_css(swatches, filepath='', declarations_only=False):
 			css = css[:-1]
 		return prefix + css + postfix
 
-def save_css(swatch_filepath, css):
-	if swatch_filepath.split('.')[-1] == 'ase':
-		css_filepath = '.'.join(swatch_filepath.split('.')[:-1]) + '.css'
+def save_css(swatch_filepath, style, css):
+	#set file extention based on desired output
+	if(style == 'scss'):
+		ext = '.scss'
 	else:
-		css_filepath = swatch_filepath + '.css'
+		ext = '.css'
+
+	if swatch_filepath.split('.')[-1] == 'ase':
+		css_filepath = '.'.join(swatch_filepath.split('.')[:-1]) + ext
+	else:
+		css_filepath = swatch_filepath + ext
 
 	with open(css_filepath, 'w') as file:
 		file.write(css)
@@ -64,8 +85,10 @@ def save_css(swatch_filepath, css):
 def main():
 	swatch_filepath = sys.argv[1]
 	swatches = parse_swatches(swatch_filepath)
+	style = sys.argv[2]
 
-	css = swatches_to_css(swatches, filepath=swatch_filepath)
-	save_css(swatch_filepath, css)
+	css = swatches_to_css(swatches, style, filepath=swatch_filepath)
+	
+	save_css(swatch_filepath, style, css)
 
 main()
