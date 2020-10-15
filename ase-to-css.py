@@ -1,6 +1,7 @@
 import swatch as swatch_parser
 import sys
 import re
+import argparse
 
 def parse_swatches(filepath):
 	return swatch_parser.parse(filepath)
@@ -83,12 +84,19 @@ def save_css(swatch_filepath, style, css):
 		file.write(css)
 
 def main():
-	swatch_filepath = sys.argv[1]
-	swatches = parse_swatches(swatch_filepath)
-	style = sys.argv[2]
+	text = 'This program transforms swatches in a .ase file into css variables.' #program discription
+	#swatch_filepath = sys.argv[1]
+	#style = sys.argv[2]
 
-	css = swatches_to_css(swatches, style, filepath=swatch_filepath)
+	parser = argparse.ArgumentParser(description=text) #parser init
+	parser.add_argument("input", help="Input file path.") #argument for the input file
+	parser.add_argument("-s", "--style", help="Set output style sheet format.", default="css") #argument for style
 	
-	save_css(swatch_filepath, style, css)
+	args = parser.parse_args() #put the arguements here
+
+	swatches = parse_swatches(args.input)
+
+	css = swatches_to_css(swatches, args.style, filepath=args.input)
+	save_css(args.input, args.style, css)
 
 main()
